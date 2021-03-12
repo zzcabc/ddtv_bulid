@@ -47,11 +47,11 @@ jobs:
       - name: Docker Build
         run: |
           cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release
-          docker build . --file $DOCKER_FILE --tag $IMAGE_NAME:latest
+          docker build . --file $DOCKER_FILE --tag $IMAGE_NAME:LA
 
       - name: Log into registry
         run: |
-          echo "${{ secrets.ACCESS_TOKEN }}" | docker login -u libra146 --password-stdin
+          docker login -u zzcabc --password-stdin zzc19990105.
       
       - name: Push image
         run: |
