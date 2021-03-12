@@ -48,9 +48,8 @@ jobs:
 
       - name: Upload Dockerfile
         run: |
-          cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0
-          sudo mv /home/runner/work/ddtv_bulid/ddtv_bulid/config/Dockerfile /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0/Dockerfile
-
+          sudo mv /home/runner/work/ddtv_bulid/ddtv_bulid/config/Dockerfile /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0/publish/Dockerfile
+          cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0/publish/Dockerfile
           sudo docker build -t $IMAGE_NAME:latest .
 
 
