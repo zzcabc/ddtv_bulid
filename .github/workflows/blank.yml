@@ -42,14 +42,13 @@ jobs:
 
       - name: Build Source
         run: |
-          cd ddtv
-          cd DDTVLiveRec
+          cd ddtv/DDTVLiveRec
           sudo dotnet publish -c Release /p:DebugType=None
 
       - name: Upload Dockerfile
         run: |
           sudo mv /home/runner/work/ddtv_bulid/ddtv_bulid/config/Dockerfile /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0/publish/Dockerfile
-          cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0/publish/Dockerfile
+          cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0/publish
           sudo docker build -t $IMAGE_NAME:latest .
 
 
