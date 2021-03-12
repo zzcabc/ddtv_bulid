@@ -9,31 +9,44 @@ on:
 env:
   # 设置 docker 镜像名
   IMAGE_NAME: zzcabc/ddtv
+  REPO_URL: https://github.com/CHKZL/DDTV2
+  REPO_BRANCH: master
+  DOCKER_FILE: config/Dockerfile
+  TZ: Asia/Shanghai
 
 jobs:
-  # 运行测试，如果需要的话，将注释取消掉并且修改为自己需要的内容
-  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
-  #  test:
-  #    runs-on: ubuntu-latest
-  #
-  #    steps:
-  #      - uses: actions/checkout@v2
-  #
-  #      - name: Run tests
-  #        run: |
-  #          if [ -f docker-compose.test.yml ]; then
-  #            docker-compose --file docker-compose.test.yml build
-  #            docker-compose --file docker-compose.test.yml run sut
-  #          else
-  #            docker build . --file Dockerfile
-  #          fi
+  Build:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
 
-  # Push image to GitHub Packages.
-  # See also https://docs.docker.com/docker-hub/builds/
-  push:
-    # 如果需要在构建前进行测试的话需要取消下面的注释和上面对应的 test 动作的注释。
-    # needs: test
+      - name: Initialization Environment
+        run: |
+          sudo -E wget -qq https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+          sudo -E dpkg -qq  sudo dpkg -i packages-microsoft-prod.deb
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install -y apt-transport-https
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install -y git dotnet-sdk-5.0
+          sudo -E apt-get -qq clean
+          sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
+      - name: Clone Source Code
+        run: |
+          df -hT $PWD
+          git clone --depth 1 $REPO_URL -b $REPO_BRANCH ddtv
+
+      - name: Build Source
+        run: |
+          cd ddtv
+          cd DDTVLiveRec
+          dotnet publish -c Release /p:DebugType=None
+
+
+
+
+  #push:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
