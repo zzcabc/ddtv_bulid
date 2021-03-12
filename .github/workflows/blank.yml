@@ -46,6 +46,17 @@ jobs:
           cd DDTVLiveRec
           sudo dotnet publish -c Release /p:DebugType=None
 
+      - name: Upload Dockerfile
+        run: |
+          [ -e $DOCKER_FILE ] && mv #DOCKER_FILE /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release
+
+  Upload:
+    needs: [Build]
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
       - name: Docker Build
         run: |
           cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release
