@@ -75,7 +75,7 @@ jobs:
           # 设置镜像 id 和版本号
           #docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           # 进行 push
-          docker push zzcabc/ddtv:
+          docker push $DOCKER_IMAGE
 
 
 
