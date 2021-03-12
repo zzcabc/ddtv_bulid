@@ -51,12 +51,12 @@ jobs:
           cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0
           sudo mv /home/runner/work/ddtv_bulid/ddtv_bulid/config/Dockerfile /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0/Dockerfile
 
-          sudo docker build -t $IMAGE_NAME:latest
+          sudo docker build -t $IMAGE_NAME:latest .
 
 
       - name: Log into registry
         run: |
-          sudo docker login -u zzcabc --password-stdin zzc19990105.
+          sudo docker login -u ${{ secrets.DOCKER_USER }} --password-stdin ${{ secrets.DOCKER_PASSWORD }}
       
       - name: Push image
         run: |
