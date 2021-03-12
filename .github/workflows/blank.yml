@@ -37,7 +37,7 @@ jobs:
 
       - name: Clone Source Code
         run: |
-          df -hT $PWD
+          sudo docker pull mcr.microsoft.com/dotnet/aspnet:5.0
           git clone --depth 1 $REPO_URL -b $REPO_BRANCH ddtv
 
       - name: Build Source
