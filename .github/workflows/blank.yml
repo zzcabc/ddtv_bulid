@@ -55,11 +55,12 @@ jobs:
 
       - name: Log into registry
         run: |
-          sudo docker login -u ${{ secrets.DOCKER_USER }} --password-stdin ${{ secrets.DOCKER_PASSWORD }}
+          
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push $IMAGE_NAME:latest
+          
       
-      - name: Push image
-        run: |
-          sudo docker push $IMAGE_NAME:latest
+
 
 
 
