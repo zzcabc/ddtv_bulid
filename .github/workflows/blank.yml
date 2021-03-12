@@ -25,11 +25,15 @@ jobs:
           sudo wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
           sudo dpkg -i packages-microsoft-prod.deb
           sudo apt-get update
-          sudo apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+          sudo apt-get install -y apt-transport-https
+          sudo curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo chmod 777 get-docker.sh
+          sudo sh get-docker.sh
           sudo apt-get update
-          sudo apt-get install -y git dotnet-sdk-5.0 docker-ce docker-ce-cli containerd.io
+          sudo apt-get install -y git dotnet-sdk-5.0
           sudo apt-get clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+          sudo systemctl docker start
 
       - name: Clone Source Code
         run: |
@@ -40,20 +44,20 @@ jobs:
         run: |
           cd ddtv
           cd DDTVLiveRec
-          dotnet publish -c Release /p:DebugType=None
+          sudo dotnet publish -c Release /p:DebugType=None
 
       - name: Docker Build
         run: |
           cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release
-          docker build . --file $DOCKER_FILE --tag $IMAGE_NAME:LA
+          sudo docker build . --file $DOCKER_FILE --tag $IMAGE_NAME:LA
 
       - name: Log into registry
         run: |
-          docker login -u zzcabc --password-stdin zzc19990105.
+          sudo docker login -u zzcabc --password-stdin zzc19990105.
       
       - name: Push image
         run: |
-          docker push $IMAGE_NAME:latest
+          sudo docker push $IMAGE_NAME:latest
 
 
 
