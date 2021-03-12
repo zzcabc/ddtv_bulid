@@ -47,7 +47,7 @@ jobs:
       - name: Docker Build
         run: |
           cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release
-          docker build . --file $DOCKER_FILE --tag $IMAGE_NAME
+          docker build . --file $DOCKER_FILE --tag $IMAGE_NAME:latest
 
       - name: Log into registry
         run: |
@@ -55,27 +55,8 @@ jobs:
       
       - name: Push image
         run: |
-          # 拼接镜像 id，这个镜像 id 就是在使用 docker 镜像时 pull 后面的名字。
-          #IMAGE_ID=libra146/$IMAGE_NAME
+          docker push $IMAGE_NAME:latest
 
-          # 将所有的大写字母转为小写
-          #IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
-          # 从 GitHub.ref 中取出版本
-         # VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          # 从 tag 名字中替换 v 字符
-         # [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-
-          # Use Docker `latest` tag convention
-          #[ "$VERSION" == "master" ] && VERSION=latest
-
-          #echo IMAGE_ID=$IMAGE_ID
-          #echo VERSION=$VERSION
-          # 设置镜像 id 和版本号
-          #docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          # 进行 push
-          docker push $DOCKER_IMAGE
 
 
 
