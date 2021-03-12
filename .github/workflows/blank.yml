@@ -48,19 +48,18 @@ jobs:
 
       - name: Upload Dockerfile
         run: |
-          [ -e $DOCKER_FILE ] && mv #DOCKER_FILE /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release
+          cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0
+          echo "FROM mcr.microsoft.com/dotnet/aspnet:5.0" > Dockerfile
+          echo "\t WORKDIR /DDTVLiveRec" > Dockerfile
+          echo "RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo \'Asia/Shanghai\' >/etc/timezone" > Dockerfile 
+          echo "ADD /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0/publish/ /DDTVLiveRec" > Dockerfile 
+          echo "EXPOSE 11419" > Dockerfile 
+          echo "VOLUME /DDTVLiveRec/tmp" > Dockerfile 
+          echo "VOLUME /DDTVLiveRec/BiliUser.ini" > Dockerfile 
+          echo "VOLUME /DDTVLiveRec/RoomListConfig.json" > Dockerfile 
+          echo "ENTRYPOINT [\"dotnet\", \"DDTVLiveRec.dll\"]" > Dockerfile
+          sudo dockre build -t $IMAGE_NAME:latest
 
-  Upload:
-    needs: [Build]
-    runs-on: ubuntu-18.04
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Docker Build
-        run: |
-          cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release
-          sudo docker build . --file $DOCKER_FILE --tag $IMAGE_NAME:LA
 
       - name: Log into registry
         run: |
