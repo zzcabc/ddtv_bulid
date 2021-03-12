@@ -15,7 +15,7 @@ env:
 
 jobs:
   Build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -50,13 +50,18 @@ jobs:
           sudo mv /home/runner/work/ddtv_bulid/ddtv_bulid/config/Dockerfile /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0/Dockerfile
           cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec
           sudo ls
+          pwd
           cd bin
+          pwd
           sudo ls
           cd Release
+          pwd
           ls
           cd net5.0
+          pwd
           ls
           cd publish
+          pwd
           ls
           sudo docker build -t $IMAGE_NAME:latest .
 
