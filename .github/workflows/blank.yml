@@ -25,9 +25,11 @@ jobs:
           sudo wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
           sudo dpkg -i packages-microsoft-prod.deb
           sudo apt-get update
-          sudo apt-get install -y apt-transport-https
+          sudo apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+          sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg
+          sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
           sudo apt-get update
-          sudo apt-get install -y git dotnet-sdk-5.0
+          sudo apt-get install -y git dotnet-sdk-5.0 docker-ce docker-ce-cli containerd.io
           sudo apt-get clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
@@ -41,3 +43,39 @@ jobs:
           cd ddtv
           cd DDTVLiveRec
           dotnet publish -c Release /p:DebugType=None
+
+      - name: Docker Build
+        run: |
+          cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release
+          docker build . --file $DOCKER_FILE --tag $IMAGE_NAME
+
+      - name: Log into registry
+        run: |
+          echo "${{ secrets.ACCESS_TOKEN }}" | docker login -u libra146 --password-stdin
+      
+      - name: Push image
+        run: |
+          # 拼接镜像 id，这个镜像 id 就是在使用 docker 镜像时 pull 后面的名字。
+          IMAGE_ID=libra146/$IMAGE_NAME
+
+          # 将所有的大写字母转为小写
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # 从 GitHub.ref 中取出版本
+         # VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # 从 tag 名字中替换 v 字符
+         # [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          # 设置镜像 id 和版本号
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          # 进行 push
+          docker push $IMAGE_ID:$VERSION
+
+
+
