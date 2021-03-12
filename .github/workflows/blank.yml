@@ -49,15 +49,15 @@ jobs:
         run: |
           sudo mv /home/runner/work/ddtv_bulid/ddtv_bulid/config/Dockerfile /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0/Dockerfile
           cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec
-          sudo ll
+          sudo ls
           cd bin
-          sudo ll
+          sudo ls
           cd Release
-          ll
+          ls
           cd net5.0
-          ll
+          ls
           cd publish
-          ll
+          ls
           sudo docker build -t $IMAGE_NAME:latest .
 
 
