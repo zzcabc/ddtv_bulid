@@ -11,6 +11,7 @@ env:
   REPO_BRANCH: master
   DOCKER_FILE: config/Dockerfile
   TZ: Asia/Shanghai
+  UPLOAD_RELEASE: true
 
 jobs:
   Build:
@@ -21,13 +22,13 @@ jobs:
 
       - name: Initialization Environment
         run: |
-          sudo -E wget  https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-          sudo -E dpkg -i packages-microsoft-prod.deb
-          sudo -E apt-get -qq update
-          sudo -E apt-get -qq install -y apt-transport-https
-          sudo -E apt-get -qq update
-          sudo -E apt-get -qq install -y git dotnet-sdk-5.0
-          sudo -E apt-get -qq clean
+          sudo wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+          sudo dpkg -i packages-microsoft-prod.deb
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https
+          sudo apt-get update
+          sudo apt-get install -y git dotnet-sdk-5.0
+          sudo apt-get clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
       - name: Clone Source Code
