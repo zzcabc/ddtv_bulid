@@ -21,7 +21,7 @@ jobs:
 
       - name: Initialization Environment
         run: |
-          sudo -E wget -qq https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+          sudo  wget  https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
           sudo -E dpkg -qq  sudo dpkg -i packages-microsoft-prod.deb
           sudo -E apt-get -qq update
           sudo -E apt-get -qq install -y apt-transport-https
