@@ -59,6 +59,7 @@ jobs:
           sudo echo -e "VOLUME /DDTVLiveRec/BiliUser.ini"  > Dockerfile
           sudo echo -e "VOLUME /DDTVLiveRec/RoomListConfig.json"  > Dockerfile
           sudo echo -e "ENTRYPOINT [\"dotnet\", \"DDTVLiveRec.dll\"]"  > Dockerfile
+          
           sudo docker buildx build \
             --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 \
             -t zzcabc/ddtv .
