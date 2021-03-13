@@ -48,7 +48,7 @@ jobs:
           sudo dotnet publish -c Release /p:DebugType=None
       - name: Run Buildx
         run: |
-          cd bin/Release/net5.0
+          cd ddtv/DDTVLiveRec/bin/Release/net5.0
           docker buildx build \
             --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 \
             -t zzcabc/ddtv .
