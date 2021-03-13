@@ -16,5 +16,5 @@ zzcabc/ddtv:amd64 \
 -v {config-path}BiliUser.ini:/DDTVLiveRec/BiliUser.ini \
 -v {config-path}RoomListConfig.json:/DDTVLiveRec/RoomListConfig.json \
 -v {config-path}tmp:/DDTVLiveRec/tmp \
---name ddtv \
+--name ddtv 
 ```
