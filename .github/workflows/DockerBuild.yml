@@ -38,7 +38,7 @@ jobs:
 
       - name: Build Source
         run: |
-          mkdir -P ddtv/DDTVLiveRec/bin/Release/net5.0
+          mkdir -p ddtv/DDTVLiveRec/bin/Release/net5.0
           sudo cp config/Dockerfile ddtv/DDTVLiveRec/bin/Release/net5.0/Dockerfile
           cd ddtv/DDTVLiveRec
           sudo dotnet publish -c Release /p:DebugType=None
