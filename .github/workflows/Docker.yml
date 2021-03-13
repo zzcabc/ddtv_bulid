@@ -30,27 +30,16 @@ jobs:
           sudo sh get-docker.sh
           sudo apt-get clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+      - name: Open Docker Buildx
+        run: |
+          echo -e "{" > /etc/docker/daemon.json
+          echo -e "\t\"experimental\": true" > /etc/docker/daemon.json
+          echo -e "}" > /etc/docker/daemon.json
+      - name: Restart Docker
+        run: |
           sudo systemctl restart docker
+          sudo docker info | grep -i exp
 
-      - name: Clone Source Code
-        run: |
-          git clone --depth 1 $REPO_URL -b $REPO_BRANCH ddtv
-
-      - name: Build Source
-        run: |
-          mkdir -p ddtv/DDTVLiveRec/bin/Release/net5.0
-          sudo cp config/Dockerfile ddtv/DDTVLiveRec/bin/Release/net5.0/Dockerfile
-          cd ddtv/DDTVLiveRec
-          sudo dotnet publish -c Release /p:DebugType=None
-
-      - name: Build Docker Iamge
-        run: |
-          cd bin/Release/net5.0
-          sudo docker build -t $IMAGE_NAME:latest .
-
-      - name: Log into registry
-        run: |
-          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push $IMAGE_NAME:amd64
           
       
