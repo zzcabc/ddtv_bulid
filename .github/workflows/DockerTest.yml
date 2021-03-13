@@ -43,13 +43,11 @@ jobs:
 
       - name: Build Source
         run: |
-          mkdir -p $RELEASE_PATH
-          cp $DOCKER_FILE $RELEASE_PATH/Dockerfile
           cd ddtv/DDTVLiveRec
           sudo dotnet publish -c Release /p:DebugType=None
       - name: Run Buildx
         run: |
-          cd ddtv/DDTVLiveRec/bin/Release/net5.0
+          cd RELEASE_PATH
           echo -e "FROM mcr.microsoft.com/dotnet/aspnet:5.0" > Dockerfile
           echo -e "WORKDIR /DDTVLiveRec" > Dockerfile
           echo -e "RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone" > Dockerfile
