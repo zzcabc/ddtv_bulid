@@ -46,7 +46,7 @@ jobs:
       - name: Build Docker Iamge
         run: |
           cd ddtv/DDTVLiveRec/bin/Release/net5.0
-          sudo docker build -t $IMAGE_NAME:latest .
+          sudo docker build -t $IMAGE_NAME:amd64 .
 
       - name: Log into registry
         run: |
