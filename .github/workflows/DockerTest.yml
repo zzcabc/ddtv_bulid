@@ -8,7 +8,8 @@ env:
   # 设置 docker 镜像名
   REPO_URL: https://github.com/CHKZL/DDTV2
   REPO_BRANCH: master
-  DOCKER_FILE: config/Dockerfile
+  IMAGE_NAME: zzcabc/ddtv
+  RELEASE_PATH: ddtv/DDTVLiveRec/bin/Release/net5.0
   TZ: Asia/Shanghai
   UPLOAD_RELEASE: true
 
@@ -42,13 +43,22 @@ jobs:
 
       - name: Build Source
         run: |
-          mkdir -p ddtv/DDTVLiveRec/bin/Release/net5.0
-          cp config/Dockerfile ddtv/DDTVLiveRec/bin/Release/net5.0/Dockerfile
+          mkdir -p $RELEASE_PATH
+          cp $DOCKER_FILE $RELEASE_PATH/Dockerfile
           cd ddtv/DDTVLiveRec
           sudo dotnet publish -c Release /p:DebugType=None
       - name: Run Buildx
         run: |
           cd ddtv/DDTVLiveRec/bin/Release/net5.0
+          echo -e "FROM mcr.microsoft.com/dotnet/aspnet:5.0" > Dockerfile
+          echo -e "WORKDIR /DDTVLiveRec" > Dockerfile
+          echo -e "RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone" > Dockerfile
+          echo -e "COPY ./publish /DDTVLiveRec"  > Dockerfile
+          echo -e "EXPOSE 11419" > Dockerfile
+          echo -e "VOLUME /DDTVLiveRec/tmp"
+          echo -e "VOLUME /DDTVLiveRec/BiliUser.ini
+          echo -e "VOLUME /DDTVLiveRec/RoomListConfig.json
+          echo -e "ENTRYPOINT ["dotnet", "DDTVLiveRec.dll"]
           docker buildx build \
             --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 \
             -t zzcabc/ddtv .
