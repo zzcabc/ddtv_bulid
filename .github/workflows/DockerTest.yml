@@ -1,4 +1,4 @@
-name: DDTV_Docker_Image
+name: Docker_Build_Test
 
 on:
   watch:
@@ -8,58 +8,49 @@ env:
   # 设置 docker 镜像名
   REPO_URL: https://github.com/CHKZL/DDTV2
   REPO_BRANCH: master
-  IMAGE_NAME: zzcabc/ddtv
+  DOCKER_FILE: config/Dockerfile
+  IMAGE_NAME: zzcabc/ddtv:amd64
   RELEASE_PATH: ddtv/DDTVLiveRec/bin/Release/net5.0
   TZ: Asia/Shanghai
   UPLOAD_RELEASE: true
 
 jobs:
-  buildx:
-    runs-on: ubuntu-latest
+  Build:
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: crazy-max/ghaction-docker-buildx@v3
-        with:
-          buildx-version: latest
-          qemu-version: latest
-
-      - name: Available platforms
-        run: echo ${{ steps.buildx.outputs.platforms }}
+        uses: actions/checkout@main
 
       - name: Initialization Environment
         run: |
           sudo wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
           sudo dpkg -i packages-microsoft-prod.deb
-          sudo apt-get update
+          sudo curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo chmod 777 get-docker.sh
+          sudo sh get-docker.sh
           sudo apt-get install -y apt-transport-https git dotnet-sdk-5.0
+          sudo apt-get clean
+          sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+          sudo systemctl restart docker
 
       - name: Clone Source Code
         run: |
           git clone --depth 1 $REPO_URL -b $REPO_BRANCH ddtv
 
-      - name: Build Source
+      - name: path
         run: |
-          cd ddtv/DDTVLiveRec
-          sudo dotnet publish -c Release /p:DebugType=None
-      - name: Run Buildx
-        run: |
-          cd $RELEASE_PATH
-          sudo touch Dockerfile
-          sudo chmod 777 Dockerfile
-          sudo echo -e "FROM mcr.microsoft.com/dotnet/aspnet:5.0" > Dockerfile
-          sudo echo -e "WORKDIR /DDTVLiveRec" > Dockerfile
-          sudo echo -e "RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone" > Dockerfile
-          sudo echo -e "COPY ./publish /DDTVLiveRec"  > Dockerfile
-          sudo echo -e "EXPOSE 11419" > Dockerfile
-          sudo echo -e "VOLUME /DDTVLiveRec/tmp"  > Dockerfile
-          sudo echo -e "VOLUME /DDTVLiveRec/BiliUser.ini"  > Dockerfile
-          sudo echo -e "VOLUME /DDTVLiveRec/RoomListConfig.json"  > Dockerfile
-          sudo echo -e "ENTRYPOINT [\"dotnet\", \"DDTVLiveRec.dll\"]"  > Dockerfile
+          pwd
+          ls
+          cd etc
+          pwd
+          ls
+          cd docker
+          pwd
+          ls
+          
+      
 
-          sudo docker buildx build \
-            --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 \
-            -t zzcabc/ddtv .
+
+
+
+
