@@ -31,7 +31,10 @@ jobs:
           sudo apt-get install -y apt-transport-https git dotnet-sdk-5.0
           sudo apt-get clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+          sudo export DOCKER_CLI_EXPERIMENTAL=enabled
           sudo systemctl restart docker
+          sudo docker run --rm --privileged docker/binfmt:66f9012c56a8316f9244ffd7622d7c21c1f6f28d
+          sudo docker buildx ls
 
       - name: Clone Source Code
         run: |
