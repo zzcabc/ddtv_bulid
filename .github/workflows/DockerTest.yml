@@ -1,4 +1,4 @@
-name: Docker
+name: Docker_Test
 
 on:
   watch:
@@ -13,11 +13,21 @@ env:
   UPLOAD_RELEASE: true
 
 jobs:
-  Build:
-    runs-on: ubuntu-20.04
+  buildx:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
+        with:
+          buildx-version: latest
+          qemu-version: latest
+
+      - name: Available platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}
 
       - name: Initialization Environment
         run: |
@@ -25,12 +35,6 @@ jobs:
           sudo dpkg -i packages-microsoft-prod.deb
           sudo apt-get update
           sudo apt-get install -y apt-transport-https git dotnet-sdk-5.0
-          sudo curl -fsSL https://get.docker.com -o get-docker.sh
-          sudo chmod 777 get-docker.sh
-          sudo sh get-docker.sh
-          sudo apt-get clean
-          sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-          sudo systemctl restart  docker
 
       - name: Clone Source Code
         run: |
@@ -42,20 +46,9 @@ jobs:
           cp config/Dockerfile ddtv/DDTVLiveRec/bin/Release/net5.0/Dockerfile
           cd ddtv/DDTVLiveRec
           sudo dotnet publish -c Release /p:DebugType=None
-
-      - name: Build Docker Iamge
+      - name: Run Buildx
         run: |
           cd bin/Release/net5.0
-          sudo docker build -t $IMAGE_NAME:latest .
-
-      - name: Log into registry
-        run: |
-          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push $IMAGE_NAME:latest
-          
-      
-
-
-
-
-
+          docker buildx build \
+            --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 \
+            -t zzcabc/ddtv .
