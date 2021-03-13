@@ -1,4 +1,4 @@
-name: DDTV_Docker_Build
+name: Docker_Test
 
 on:
   watch:
@@ -45,7 +45,7 @@ jobs:
 
       - name: Build Docker Iamge
         run: |
-          cd ddtv/DDTVLiveRec/bin/Release/net5.0
+          cd bin/Release/net5.0
           sudo docker build -t $IMAGE_NAME:latest .
 
       - name: Log into registry
@@ -54,8 +54,3 @@ jobs:
           docker push $IMAGE_NAME:amd64
           
       
-
-
-
-
-
