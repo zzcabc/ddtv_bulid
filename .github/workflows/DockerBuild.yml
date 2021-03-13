@@ -30,7 +30,9 @@ jobs:
           sudo sh get-docker.sh
           sudo apt-get clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+          sudo export DOCKER_CLI_EXPERIMENTAL=enabled
           sudo systemctl restart docker
+          docker buildx ls
 
       - name: Clone Source Code
         run: |
@@ -46,12 +48,12 @@ jobs:
       - name: Build Docker Iamge
         run: |
           cd ddtv/DDTVLiveRec/bin/Release/net5.0
-          sudo docker build -t $IMAGE_NAME:amd64 .
+          sudo docker build --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64, -t $IMAGE_NAME:latest .
 
       - name: Log into registry
         run: |
           docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push $IMAGE_NAME:amd64
+          docker push $IMAGE_NAME:latest
           
       
 
