@@ -1,4 +1,4 @@
-name: Docker_Test
+name: DDTV_Docker_Image
 
 on:
   watch:

@@ -1,4 +1,4 @@
-name: Docker
+name: DDTV_Docker_Image_Build_amd64
 
 on:
   watch:

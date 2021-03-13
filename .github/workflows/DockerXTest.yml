@@ -1,4 +1,4 @@
-name: Docker_Test
+name: DockerX_Test
 
 on:
   watch:
@@ -51,14 +51,14 @@ jobs:
           sudo touch Dockerfile
           sudo chmod 777 Dockerfile
           sudo echo -e "FROM mcr.microsoft.com/dotnet/aspnet:5.0" > Dockerfile
-          sudo echo -e "WORKDIR /DDTVLiveRec" > Dockerfile
-          sudo echo -e "RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone" > Dockerfile
-          sudo echo -e "COPY ./publish /DDTVLiveRec"  > Dockerfile
-          sudo echo -e "EXPOSE 11419" > Dockerfile
-          sudo echo -e "VOLUME /DDTVLiveRec/tmp"  > Dockerfile
-          sudo echo -e "VOLUME /DDTVLiveRec/BiliUser.ini"  > Dockerfile
-          sudo echo -e "VOLUME /DDTVLiveRec/RoomListConfig.json"  > Dockerfile
-          sudo echo -e "ENTRYPOINT [\"dotnet\", \"DDTVLiveRec.dll\"]"  > Dockerfile
+          sudo echo -e "\rWORKDIR /DDTVLiveRec" >> Dockerfile
+          sudo echo -e "\rRUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone" >> Dockerfile
+          sudo echo -e "\rCOPY ./publish /DDTVLiveRec"  >> Dockerfile
+          sudo echo -e "\rEXPOSE 11419" >> Dockerfile
+          sudo echo -e "\rVOLUME /DDTVLiveRec/tmp"  >> Dockerfile
+          sudo echo -e "\rVOLUME /DDTVLiveRec/BiliUser.ini"  >> Dockerfile
+          sudo echo -e "\rVOLUME /DDTVLiveRec/RoomListConfig.json"  >> Dockerfile
+          sudo echo -e "\rENTRYPOINT [\"dotnet\", \"DDTVLiveRec.dll\"]"  >> Dockerfile
           sudo docker buildx --help
           sudo docker buildx create --use
           sudo docker buildx build \
