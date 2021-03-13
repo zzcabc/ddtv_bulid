@@ -6,7 +6,6 @@ on:
 
 env:
   # 设置 docker 镜像名
-  IMAGE_NAME: zzcabc/ddtv
   REPO_URL: https://github.com/CHKZL/DDTV2
   REPO_BRANCH: master
   DOCKER_FILE: config/Dockerfile
@@ -25,19 +24,16 @@ jobs:
           sudo wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
           sudo dpkg -i packages-microsoft-prod.deb
           sudo apt-get update
-          sudo apt-get install -y apt-transport-https
+          sudo apt-get install -y apt-transport-https git dotnet-sdk-5.0
           sudo curl -fsSL https://get.docker.com -o get-docker.sh
           sudo chmod 777 get-docker.sh
           sudo sh get-docker.sh
-          sudo apt-get update
-          sudo apt-get install -y git dotnet-sdk-5.0
           sudo apt-get clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
           sudo systemctl restart  docker
 
       - name: Clone Source Code
         run: |
-          sudo docker pull mcr.microsoft.com/dotnet/aspnet:5.0
           git clone --depth 1 $REPO_URL -b $REPO_BRANCH ddtv
 
       - name: Build Source
@@ -45,19 +41,17 @@ jobs:
           cd ddtv/DDTVLiveRec
           sudo dotnet publish -c Release /p:DebugType=None
 
-      - name: Upload Dockerfile
+      - name: Build Docker Iamge
         run: |
-          sudo mv /home/runner/work/ddtv_bulid/ddtv_bulid/config/Dockerfile /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0/Dockerfile
-          cd /home/runner/work/ddtv_bulid/ddtv_bulid/ddtv/DDTVLiveRec/bin/Release/net5.0
-         
+          sudo mv ../../config/Dockerfile /bin/Release/net5.0/Dockerfile
+          cd bin/Release/net5.0
           sudo docker build -t $IMAGE_NAME:latest .
-
 
       - name: Log into registry
         run: |
           
           docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:amd64
           
       
 
