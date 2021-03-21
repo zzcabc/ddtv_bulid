@@ -2,6 +2,8 @@
 
 [源项目地址](https://github.com/CHKZL/DDTV2)
 
+[aS737345039的多架构Docker版](https://github.com/aS737345039/Docker-DDTVLiveRec)
+
 本项目利用GitHub Action编译源码，打包成Docker镜像，自动上传至[DockerHub](https://registry.hub.docker.com/r/zzcabc/ddtv)
 
 手动点击Star获取最新的源码，编译并上传，目前仅支持AMD64位CPU架构
